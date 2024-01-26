@@ -6,7 +6,7 @@ from infi.systray import SysTrayIcon
 
 print("Booting...")
 
-prev_window = any
+prev_window = "0"
 
 def get_current_screen():
     global prev_window
@@ -31,6 +31,10 @@ def get_current_screen():
 
 def move_prev_window_to_next_screen():
     global prev_window
+    
+    if prev_window == "0":
+        return;
+    
     print(prev_window)
     print("none entered")
 

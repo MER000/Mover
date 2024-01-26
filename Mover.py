@@ -3,6 +3,7 @@ import win32api
 from pynput import mouse
 import time
 from infi.systray import SysTrayIcon
+import asyncio
 
 print("Booting...")
 
@@ -29,11 +30,11 @@ def get_current_screen():
     
     return screen_index
 
-def move_prev_window_to_next_screen():
+async def move_prev_window_to_next_screen():
     global prev_window
     
     if prev_window == "0":
-        return;
+        return
     
     print(prev_window)
     print("none entered")
@@ -57,14 +58,14 @@ def move_prev_window_to_next_screen():
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        await asyncio.sleep(0.21555)
         prev_window.maximize()
     elif screen_index[0] == 0 and prev_window.isMaximized:
         new_x = -1691
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        await asyncio.sleep(0.21555)
         prev_window.maximize()
     elif screen_index[0] != 0:
         new_x = x + screen_width
@@ -75,15 +76,15 @@ def move_prev_window_to_next_screen():
         new_y = y
         prev_window.moveTo(new_x, new_y)
 
-def move_window_to_next_screen():
+async def move_window_to_next_screen():
     # Error check if window is null
-    #if gw.getActiveWindow() == None:
+    # if gw.getActiveWindow() == None:
     try:
         if gw.getActiveWindow().title == "":
-            move_prev_window_to_next_screen()
+            await move_prev_window_to_next_screen()
             return
     except AttributeError:
-        move_prev_window_to_next_screen()
+        await move_prev_window_to_next_screen()
         return
 
     current_screen = get_current_screen()
@@ -104,14 +105,14 @@ def move_window_to_next_screen():
         new_y = 220
         active_window.restore()
         active_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        await asyncio.sleep(0.21555)
         active_window.maximize()
     elif current_screen[0] == 0 and active_window.isMaximized:
         new_x = -1691
         new_y = 220
         active_window.restore()
         active_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        await asyncio.sleep(0.21555)
         active_window.maximize()
     elif current_screen[0] != 0:
         new_x = x + screen_width
@@ -127,7 +128,7 @@ def move_window_to_next_screen():
 
 def on_click(x, y, button, pressed):
     if pressed and button == mouse.Button.x2:
-        move_window_to_next_screen()
+        asyncio.run(move_window_to_next_screen())
 
 # Create a mouse listener
 mouse_listener = mouse.Listener(on_click=on_click)

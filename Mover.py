@@ -6,13 +6,17 @@ from infi.systray import SysTrayIcon
 
 print("Booting...")
 
+prev_window = any
+
 def get_current_screen():
+    global prev_window
     # Error check if window is null
     if gw.getActiveWindow() == None:
         return
 
     # Get the active window
     active_window = gw.getWindowsWithTitle(gw.getActiveWindow().title)[0]
+    prev_window = active_window
 
     # Get the window handle
     window_handle = active_window._hWnd
@@ -27,13 +31,58 @@ def get_current_screen():
 
 def move_window_to_next_screen():
     # Error check if window is null
-    if gw.getActiveWindow() == None:
-        return
+    #if gw.getActiveWindow() == None:
     
+    try:
+        gw.getActiveWindow().title
+    except AttributeError:
+        global prev_window
+        print(prev_window)
+        print("none entered")
+
+
+        # Get the window handle
+        window_handle = prev_window._hWnd
+
+        # Call the Windows API to get the monitor information
+        monitor_info = win32api.GetMonitorInfo(win32api.MonitorFromWindow(window_handle))
+
+        # Extract the screen info
+        screen_index = monitor_info['Monitor']
+
+        screen_width = win32api.GetSystemMetrics(0)
+
+        x, y = prev_window.left, prev_window.top
+        
+        if screen_index[0] != 0 and prev_window.isMaximized:
+            new_x = 229
+            new_y = 220
+            prev_window.restore()
+            prev_window.moveTo(new_x, new_y)
+            time.sleep(0.2333)
+            prev_window.maximize()
+        elif screen_index[0] == 0 and prev_window.isMaximized:
+            new_x = -1691
+            new_y = 220
+            prev_window.restore()
+            prev_window.moveTo(new_x, new_y)
+            time.sleep(0.2333)
+            prev_window.maximize()
+        elif screen_index[0] != 0:
+            new_x = x + screen_width
+            new_y = y
+            prev_window.moveTo(new_x, new_y)
+        else:
+            new_x = x - screen_width
+            new_y = y
+            prev_window.moveTo(new_x, new_y)
+        return
+
     current_screen = get_current_screen()
 
     # Get the active window
     active_window = gw.getWindowsWithTitle(gw.getActiveWindow().title)[0]
+    print(active_window)
 
     # Get the screen width
     screen_width = win32api.GetSystemMetrics(0)

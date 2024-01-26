@@ -128,7 +128,9 @@ async def move_window_to_next_screen():
 
 def on_click(x, y, button, pressed):
     if pressed and button == mouse.Button.x2:
+        start_time = time.time()
         asyncio.run(move_window_to_next_screen())
+        print("Process finished in %s seconds" % (time.time() - start_time))
 
 # Create a mouse listener
 mouse_listener = mouse.Listener(on_click=on_click)

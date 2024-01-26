@@ -9,6 +9,7 @@ print("Booting...")
 
 prev_window = any
 
+
 def get_current_screen():
     global prev_window
     # Error check if window is null
@@ -27,14 +28,14 @@ def get_current_screen():
 
     # Extract the screen index
     screen_index = monitor_info['Monitor']
-    
+
     return screen_index
+
 
 def move_prev_window_to_next_screen():
     global prev_window
     print(prev_window)
     print("none entered")
-
 
     # Get the window handle
     window_handle = prev_window._hWnd
@@ -48,7 +49,7 @@ def move_prev_window_to_next_screen():
     screen_width = win32api.GetSystemMetrics(0)
 
     x, y = prev_window.left, prev_window.top
-        
+
     if screen_index[0] != 0 and prev_window.isMaximized:
         new_x = 229
         new_y = 220
@@ -72,9 +73,10 @@ def move_prev_window_to_next_screen():
         new_y = y
         prev_window.moveTo(new_x, new_y)
 
-def move_window_to_next_screen():
+
+def move_window_to_next_screen(x, y):
     # Error check if window is null
-    #if gw.getActiveWindow() == None:
+    # if gw.getActiveWindow() == None:
     try:
         if gw.getActiveWindow().title == "":
             move_prev_window_to_next_screen()
@@ -83,10 +85,10 @@ def move_window_to_next_screen():
         move_prev_window_to_next_screen()
         return
 
-    current_screen = get_current_screen()
+    #current_screen = get_current_screen()
 
     # Get the active window
-    active_window = gw.getWindowsWithTitle(gw.getActiveWindow().title)[0]
+    active_window = gw.getWindowsAt(x, y)
     print(active_window)
 
     # Get the screen width
@@ -96,21 +98,21 @@ def move_window_to_next_screen():
     x, y, width, height = active_window.left, active_window.top, active_window.width, active_window.height
 
     # Calculate the new position on the next screen
-    if current_screen[0] != 0 and active_window.isMaximized:
+    if  x != 0 and active_window.isMaximized:
         new_x = 229
         new_y = 220
         active_window.restore()
         active_window.moveTo(new_x, new_y)
         time.sleep(0.2333)
         active_window.maximize()
-    elif current_screen[0] == 0 and active_window.isMaximized:
+    elif x == 0 and active_window.isMaximized:
         new_x = -1691
         new_y = 220
         active_window.restore()
         active_window.moveTo(new_x, new_y)
         time.sleep(0.2333)
         active_window.maximize()
-    elif current_screen[0] != 0:
+    elif x != 0:
         new_x = x + screen_width
         new_y = y
         active_window.moveTo(new_x, new_y)
@@ -122,9 +124,11 @@ def move_window_to_next_screen():
     # Move the window to the new position
     # active_window.moveTo(new_x, new_y)
 
+
 def on_click(x, y, button, pressed):
     if pressed and button == mouse.Button.x2:
-        move_window_to_next_screen()
+        move_window_to_next_screen(x, y)
+
 
 # Create a mouse listener
 mouse_listener = mouse.Listener(on_click=on_click)
@@ -139,12 +143,15 @@ print("We Up!")
 # Keep the script running
 # mouse_listener.join()                                                     ancient code
 
+
 def on_quit_callback(systray):
     mouse_listener.stop()
     systray.shutdown()
 
+
 def movin(systray):
     systray.update(hover_text="Moovin...")
+
 
 menu_options = (("", None, movin),)
 systray = SysTrayIcon("movericon2.ico", "Mover", menu_options, on_quit=on_quit_callback)

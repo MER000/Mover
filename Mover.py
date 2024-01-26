@@ -3,7 +3,6 @@ import win32api
 from pynput import mouse
 import time
 from infi.systray import SysTrayIcon
-from contextlib import suppress
 
 print("Booting...")
 

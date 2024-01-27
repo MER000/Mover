@@ -8,6 +8,7 @@ from contextlib import suppress
 print("Booting...")
 
 prev_window = "0"
+anim_time = 0.23
 
 def get_screen_index(window):
     # Get the window handle
@@ -24,8 +25,6 @@ def get_screen_index(window):
 def move_prev_window_to_next_screen():
     if prev_window == "0":
         return;
-    
-    print("memory: " + prev_window.title)
 
     # Extract the screen info
     screen_index = get_screen_index(prev_window)
@@ -38,14 +37,14 @@ def move_prev_window_to_next_screen():
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(anim_time)
         prev_window.maximize()
     elif screen_index[0] == 0 and prev_window.isMaximized:
         new_x = -1691
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(anim_time)
         prev_window.maximize()
     elif screen_index[0] != 0:
         new_x = x + screen_width
@@ -66,17 +65,14 @@ def move_window_to_next_screen(x, y):
     
     try:
         if cur_window_title == "" or cur_window_title == "Windows Input Experience":
-            print("empty wuzza")
             move_prev_window_to_next_screen()
             return
     except AttributeError:
-        print("wuzza")
         move_prev_window_to_next_screen()
         return
 
     # Get the active window
     active_window = gw.getWindowsAt(x, y)[0]
-    print("active: " + active_window.title)
     prev_window = active_window
 
     # Extract the screen info
@@ -90,22 +86,20 @@ def move_window_to_next_screen(x, y):
     if  screen_index[0] != 0 and active_window.isMaximized:
         new_x = 229
         new_y = 220
-        active_window.restore()
-        active_window.moveTo(new_x, new_y)
-        time.sleep(0.215)
         with suppress(Exception):
             active_window.activate()
-            time.sleep(0.015)
+        active_window.restore()
+        active_window.moveTo(new_x, new_y)
+        time.sleep(anim_time)
         active_window.maximize()
     elif screen_index[0] == 0 and active_window.isMaximized:
         new_x = -1691
         new_y = 220
-        active_window.restore()
-        active_window.moveTo(new_x, new_y)
-        time.sleep(0.215)
         with suppress(Exception):
             active_window.activate()
-            time.sleep(0.015)
+        active_window.restore()
+        active_window.moveTo(new_x, new_y)
+        time.sleep(anim_time)
         active_window.maximize()
     elif screen_index[0] != 0:
         new_x = x + screen_width

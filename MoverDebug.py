@@ -8,6 +8,7 @@ from contextlib import suppress
 print("Booting...")
 
 prev_window = "0"
+anim_time = 0.23
 
 def get_screen_index(window):
     # Get the window handle
@@ -38,14 +39,14 @@ def move_prev_window_to_next_screen():
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(anim_time)
         prev_window.maximize()
     elif screen_index[0] == 0 and prev_window.isMaximized:
         new_x = -1691
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(anim_time)
         prev_window.maximize()
     elif screen_index[0] != 0:
         new_x = x + screen_width
@@ -90,22 +91,20 @@ def move_window_to_next_screen(x, y):
     if  screen_index[0] != 0 and active_window.isMaximized:
         new_x = 229
         new_y = 220
-        active_window.restore()
-        active_window.moveTo(new_x, new_y)
-        time.sleep(0.215)
         with suppress(Exception):
             active_window.activate()
-            time.sleep(0.015)
+        active_window.restore()
+        active_window.moveTo(new_x, new_y)
+        time.sleep(anim_time)
         active_window.maximize()
     elif screen_index[0] == 0 and active_window.isMaximized:
         new_x = -1691
         new_y = 220
-        active_window.restore()
-        active_window.moveTo(new_x, new_y)
-        time.sleep(0.215)
         with suppress(Exception):
             active_window.activate()
-            time.sleep(0.015)
+        active_window.restore()
+        active_window.moveTo(new_x, new_y)
+        time.sleep(anim_time)
         active_window.maximize()
     elif screen_index[0] != 0:
         new_x = x + screen_width

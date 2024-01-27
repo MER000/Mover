@@ -30,8 +30,6 @@ def get_current_screen():
     return screen_index
 
 def move_prev_window_to_next_screen():
-    global prev_window
-    
     if prev_window == "0":
         return;
     

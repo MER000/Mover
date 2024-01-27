@@ -6,7 +6,9 @@ from infi.systray import SysTrayIcon
 
 print("Booting...")
 
+# GLOBALS
 prev_window = "0"
+a_time = 0.23
 
 def get_current_screen():
     global prev_window
@@ -30,8 +32,6 @@ def get_current_screen():
     return screen_index
 
 def move_prev_window_to_next_screen():
-    global prev_window
-    
     if prev_window == "0":
         return;
     
@@ -53,14 +53,14 @@ def move_prev_window_to_next_screen():
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(a_time)
         prev_window.maximize()
     elif screen_index[0] == 0 and prev_window.isMaximized:
         new_x = -1691
         new_y = 220
         prev_window.restore()
         prev_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(a_time)
         prev_window.maximize()
     elif screen_index[0] != 0:
         new_x = x + screen_width
@@ -99,14 +99,14 @@ def move_window_to_next_screen():
         new_y = 220
         active_window.restore()
         active_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(a_time)
         active_window.maximize()
     elif current_screen[0] == 0 and active_window.isMaximized:
         new_x = -1691
         new_y = 220
         active_window.restore()
         active_window.moveTo(new_x, new_y)
-        time.sleep(0.2333)
+        time.sleep(a_time)
         active_window.maximize()
     elif current_screen[0] != 0:
         new_x = x + screen_width

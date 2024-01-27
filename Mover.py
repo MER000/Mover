@@ -35,10 +35,6 @@ def move_prev_window_to_next_screen():
     if prev_window == "0":
         return;
     
-    print(prev_window)
-    print("none entered")
-
-
     # Get the window handle
     window_handle = prev_window._hWnd
 
@@ -90,7 +86,6 @@ def move_window_to_next_screen():
 
     # Get the active window
     active_window = gw.getWindowsWithTitle(gw.getActiveWindow().title)[0]
-    print(active_window)
 
     # Get the screen width
     screen_width = win32api.GetSystemMetrics(0)

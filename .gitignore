@@ -13,3 +13,4 @@ build/Mover/localpycs/pyimod01_archive.pyc
 build/Mover/localpycs/pyimod02_importers.pyc
 build/Mover/localpycs/pyimod03_ctypes.pyc
 build/Mover/localpycs/pyimod04_pywin32.pyc
+dist/Mover.exe

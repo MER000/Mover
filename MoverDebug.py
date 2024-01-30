@@ -1,14 +1,18 @@
 import pygetwindow as gw
+from pygetwindow import PyGetWindowException
 import win32api
-from pynput import mouse
+from pynput import mouse, keyboard
 import time
 from infi.systray import SysTrayIcon
 from contextlib import suppress
+import pywinauto
 
 print("Booting...")
 
+# GLOBALS
 prev_window = "0"
 anim_time = 0.23
+active = True
 
 def get_screen_index(window):
     # Get the window handle
@@ -86,13 +90,18 @@ def move_window_to_next_screen(x, y):
 
     # Get the current window position and size
     x, y = active_window.left, active_window.top
+            
+    try:
+        active_window.activate()
+    except PyGetWindowException:
+        pywinauto.application.Application().connect(handle=active_window._hWnd).top_window().set_focus()       #neccesarry to link proccess of window for everything to work smoothly
+        active_window.activate()
+        print("lebronics")
 
     # Calculate the new position on the next screen
     if  screen_index[0] != 0 and active_window.isMaximized:
         new_x = 229
         new_y = 220
-        with suppress(Exception):
-            active_window.activate()
         active_window.restore()
         active_window.moveTo(new_x, new_y)
         time.sleep(anim_time)
@@ -100,8 +109,6 @@ def move_window_to_next_screen(x, y):
     elif screen_index[0] == 0 and active_window.isMaximized:
         new_x = -1691
         new_y = 220
-        with suppress(Exception):
-            active_window.activate()
         active_window.restore()
         active_window.moveTo(new_x, new_y)
         time.sleep(anim_time)
@@ -118,18 +125,19 @@ def move_window_to_next_screen(x, y):
     # Move the window to the new position
     # active_window.moveTo(new_x, new_y)
 
-
 def on_click(x, y, button, pressed):
-    if pressed and button == mouse.Button.x2:
+    if pressed and active and button == mouse.Button.x2:
         move_window_to_next_screen(x, y)
 
 
 # Create a mouse listener
 mouse_listener = mouse.Listener(on_click=on_click)
+#keyboard_listener = keyboard.Listener(on_press=on_press)
 
 print("......")
 
 # Start the listener in a separate thread
+#keyboard_listener.start()
 mouse_listener.start()
 
 print("We Up!")
@@ -140,6 +148,7 @@ print("We Up!")
 
 def on_quit_callback(systray):
     mouse_listener.stop()
+    l.stop()
     systray.shutdown()
 
 
@@ -150,3 +159,22 @@ def movin(systray):
 menu_options = (("", None, movin),)
 systray = SysTrayIcon("movericon2.ico", "Mover", menu_options, on_quit=on_quit_callback)
 systray.start()
+
+def toggle(bool):
+    return not bool
+
+def on_activate():
+    global active
+    active = toggle(active)
+    print(active)
+
+def for_canonical(f):
+    return lambda k: f(l.canonical(k))
+
+hotkey = keyboard.HotKey(
+    keyboard.HotKey.parse('<shift>+/'),
+    on_activate)
+with keyboard.Listener(
+        on_press=for_canonical(hotkey.press),
+        on_release=for_canonical(hotkey.release)) as l:
+    l.join()

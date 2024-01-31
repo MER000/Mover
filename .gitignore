@@ -14,3 +14,5 @@ build/Mover/localpycs/pyimod02_importers.pyc
 build/Mover/localpycs/pyimod03_ctypes.pyc
 build/Mover/localpycs/pyimod04_pywin32.pyc
 venv
+build/Mover/Mover.exe
+build/Mover/COLLECT-00.toc

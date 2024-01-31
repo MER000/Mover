@@ -89,7 +89,7 @@ def move_window_to_next_screen(x, y):
     try:
         active_window.activate()
     except PyGetWindowException:
-        pywinauto.application.Application().connect(handle=active_window._hWnd).top_window().set_focus()       #neccesarry to link proccess of window for everything to work smoothly
+        pywinauto.application.Application().connect(handle=active_window._hWnd).top_window().set_focus()       #just incase it doesn't link on launch
         active_window.activate()
 
     # Calculate the new position on the next screen
@@ -128,11 +128,16 @@ def on_click(x, y, button, pressed):
 mouse_listener = mouse.Listener(on_click=on_click)
 #keyboard_listener = keyboard.Listener(on_press=on_press)
 
-print("......")
+print("....")
 
 # Start the listener in a separate thread
 #keyboard_listener.start()
 mouse_listener.start()
+
+windows = gw.getAllWindows()
+if windows[0]:
+    pywinauto.application.Application().connect(handle=windows[0]._hWnd).top_window().set_focus()       #neccesarry to link proccess of window for everything to work smoothly
+    print("Linked\n....")
 
 print("We Up!")
 

@@ -1,0 +1,5 @@
+infi.systray==0.1.12
+PyGetWindow==0.0.9
+pynput==1.7.6
+pywin32==306
+pywinauto==0.6.8

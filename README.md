@@ -11,7 +11,7 @@ Key Features:
 - Dynamic Switching of Windows
 - Hotkey to toggle activation [Shift + /]
 - Works without focusing a window, All you need is to hover over a window and press the side mouse button
-- Pressing on an empty screen moves the last moved window to it's location
+- Pressing on an empty screen moves the last moved window to its location
 
 ## Roadmap
 
